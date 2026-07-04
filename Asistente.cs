@@ -2,7 +2,7 @@ using System;
 
 namespace Auditorio_Congreso
 {
-    // Representa a cada persona que ingresa por una de las dos
+    // Representa a cada persona que ingresa por una de las 2
     // ventanillas de registro del congreso.
     public class Asistente
     {
