@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace GuiaPractica02_PilasColas
+namespace Auditorio_Congreso
 {
     // Administra las DOS colas (FIFO) que representan la fila
     // doble de ingreso: una cola por cada persona que registra.
