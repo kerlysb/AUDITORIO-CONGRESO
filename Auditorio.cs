@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GuiaPractica02_PilasColas
+namespace Auditorio_Congreso
 {
     // Administra los 100 asientos, la cola general de asignación
     // (orden real de llegada) y una PILA (LIFO) para reasignar
@@ -27,7 +27,8 @@ namespace GuiaPractica02_PilasColas
         {
             colaAsignacion.Enqueue(a);
         }
-// Asigna asientos siguiendo estrictamente el orden FIFO
+
+        // Asigna asientos siguiendo estrictamente el orden FIFO
         // en que fueron atendidos en las ventanillas.
         public void AsignarAsientos()
         {
@@ -83,3 +84,68 @@ namespace GuiaPractica02_PilasColas
                 Console.WriteLine("El asiento ya estaba libre.");
             }
         }
+
+        // ================= REPORTERÍA =================
+
+        public void MostrarTodosLosAsientos()
+        {
+            Console.WriteLine("\n=== MAPA DE ASIENTOS DEL AUDITORIO ===");
+            for (int i = 0; i < TOTAL_ASIENTOS; i++)
+            {
+                var a = asientos[i];
+                string estado = a.Ocupado ? $"OCUPADO ({a.AsistenteAsignado.Nombre})" : "LIBRE";
+                Console.WriteLine($"Asiento {a.Numero:D3}: {estado}");
+                if ((i + 1) % 10 == 0) Console.WriteLine("----------------------------------------");
+            }
+        }
+
+        public void ConsultarAsientoPorNumero(int numero)
+        {
+            if (numero < 1 || numero > TOTAL_ASIENTOS)
+            {
+                Console.WriteLine("Número de asiento fuera de rango.");
+                return;
+            }
+            var a = asientos[numero - 1];
+            Console.WriteLine(a.Ocupado
+                ? $"Asiento {numero}: OCUPADO por {a.AsistenteAsignado}"
+                : $"Asiento {numero}: LIBRE");
+        }
+
+        public void ConsultarAsientoPorAsistente(string cedula)
+        {
+            foreach (var a in asientos)
+            {
+                if (a.Ocupado && a.AsistenteAsignado.Cedula == cedula)
+                {
+                    Console.WriteLine($"El asistente con cédula {cedula} tiene asignado el asiento #{a.Numero}");
+                    return;
+                }
+            }
+            Console.WriteLine("No se encontró un asiento asignado para esa cédula.");
+        }
+
+        public void MostrarEstadisticas()
+        {
+            int ocupados = 0;
+            foreach (var a in asientos) if (a.Ocupado) ocupados++;
+
+            Console.WriteLine("\n=== ESTADÍSTICAS DEL AUDITORIO ===");
+            Console.WriteLine($"Asientos ocupados: {ocupados}/{TOTAL_ASIENTOS}");
+            Console.WriteLine($"Asientos libres:   {TOTAL_ASIENTOS - ocupados}/{TOTAL_ASIENTOS}");
+            Console.WriteLine($"Asientos en pila de reasignación: {pilaAsientosLiberados.Count}");
+        }
+
+        public void MostrarPilaLiberados()
+        {
+            Console.WriteLine("\n--- PILA DE ASIENTOS LIBERADOS (LIFO) ---");
+            if (pilaAsientosLiberados.Count == 0)
+            {
+                Console.WriteLine("(vacía)");
+                return;
+            }
+            foreach (var numero in pilaAsientosLiberados)
+                Console.WriteLine($"Asiento #{numero}");
+        }
+    }
+}
